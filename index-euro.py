@@ -18,7 +18,7 @@ URL_VOTES = "https://github.com/HowTheyVote/data/releases/download/2026-01-03/me
 URL_MEMBERS = "https://github.com/HowTheyVote/data/releases/download/2026-01-03/members.csv.gz"
 URL_ROLLCALLS = "https://github.com/HowTheyVote/data/releases/download/2026-01-03/votes.csv.gz"
 
-st.set_page_config(page_title="EuroMatrix AI", layout="wide", page_icon="🇪🇺")
+st.set_page_config(page_title="EuroMatrix 2026", layout="wide", page_icon="🇪🇺")
 
 # --- SŁOWNIK JĘZYKOWY ---
 LANGS = {
@@ -66,6 +66,44 @@ df_base['name'], df_base['group'] = df_base.index.map(names_dict), df_base.index
 
 tabs = st.tabs([L['tab_comp'], L['tab_fra'], L['tab_ai'], L['tab_top']])
 
+# --- PANEL BOCZNY (SIDEBAR) ---
+with st.sidebar:
+    st.title("EuroMatrix AI")
+    
+    # 1. Wybór języka
+    lang_code = st.radio("Language / Język", ["PL", "EN"], horizontal=True)
+    L = LANGS[lang_code]
+    
+    st.divider()
+    
+    # 2. Informacje o projekcie i licencji (To dodajemy tutaj)
+    with st.expander("ℹ️ Info & License"):
+        if lang_code == 'PL':
+            st.markdown("""
+            **Źródło danych:**
+            Dane pochodzą z serwisu [HowTheyVote.eu](https://howtheyvote.eu).
+            
+            **Licencja:**
+            Zbiór danych udostępniony na licencji [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pl).
+            
+            **Zastrzeżenie:**
+            To nie jest oficjalna aplikacja Parlamentu Europejskiego. Analizy AI (Klastry/PCA) są interpretacją matematyczną i mogą zawierać błędy.
+            """)
+        else:
+            st.markdown("""
+            **Data Source:**
+            Data provided by [HowTheyVote.eu](https://howtheyvote.eu).
+            
+            **License:**
+            Dataset licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+            
+            **Disclaimer:**
+            This is not an official European Parliament app. AI analyses (Clusters/PCA) are mathematical interpretations and may contain errors.
+            """)
+            
+    st.divider()
+    st.caption("© 2026 EuroMatrix AI")
+
 # --- TAB 1: Porównywarka ---
 with tabs[0]:
     sel_mep_comp = st.selectbox(L['search'], sorted(list(names_dict.values())), key="c1")
@@ -111,4 +149,6 @@ with tabs[2]:
             # Pokazujemy top 15 nazwisk w klastrze
             c2.write("**Przykładowi posłowie w tej grupie:**")
             c2.caption(", ".join(members_in_cl['name'].head(15).tolist()) + "...")
+
+
 
