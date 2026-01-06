@@ -28,7 +28,7 @@ LANGS = {
         'cl_summary': "Zestawienie składu klastrów (kogo AI połączyło ze sobą):",
         'mep_belongs': "Wybrany poseł należy do:", 'no_mep': "Wybierz posła, aby go podświetlić.",
         'topic_input': "Wpisz temat (np. Ukraina, Green Deal):", 'no_results': "Brak wyników dla tego tematu.",
-        'about_author': "O Autorze", 'support': "Wsparcie projektu"
+        'about_author': "O Autorze",
     },
     'EN': {
         'tab_comp': "🤝 Comparator", 'tab_fra': "🧭 Groups", 'tab_ai': "🤖 AI Clusters", 'tab_top': "🔥 Topics",
@@ -37,7 +37,7 @@ LANGS = {
         'cl_summary': "Cluster composition overview (who was grouped together):",
         'mep_belongs': "Selected MEP belongs to:", 'no_mep': "Select an MEP to highlight them.",
         'topic_input': "Enter topic (e.g. Ukraine, Green Deal):", 'no_results': "No results for this topic.",
-        'about_author': "About Author", 'support': "Support project"
+        'about_author': "About Author", 
     }
 }
 
@@ -59,12 +59,7 @@ with st.sidebar:
     # Sekcja Wsparcie
     st.subheader(L['support'])
     # UWAGA: Podmień link poniżej na swój własny z BuyMeACoffee
-    st.markdown("""
-    <a href="https://www.buymeacoffee.com/marcindeszczka" target="_blank">
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
-        alt="Buy Me A Coffee" style="height: 40px !important;width: 145px !important;" >
-    </a>
-    """, unsafe_allow_html=True)
+   
     
     st.divider()
     
@@ -183,4 +178,5 @@ with tabs[3]:
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
+
 
