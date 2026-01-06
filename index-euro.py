@@ -52,7 +52,7 @@ with st.sidebar:
     # Sekcja Autorska
     st.subheader(L['about_author'])
     st.markdown("""
-    **Marcin Deszczka** 📧 marcin.deszczka-at-gmail.com] 
+    **Marcin Deszczka** 📧 marcin.deszczka-at-gmail.com 
     🐦 [Twitter / X](https://twitter.com/mardesz)
     """)
     
@@ -183,3 +183,4 @@ with tabs[3]:
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
+
