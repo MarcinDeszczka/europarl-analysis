@@ -56,11 +56,9 @@ with st.sidebar:
     🐦 [Twitter / X](https://twitter.com/mardesz)
     """)
     
-    # Sekcja Wsparcie
-    st.subheader(L['support'])
-    # UWAGA: Podmień link poniżej na swój własny z BuyMeACoffee
-   
     
+   
+
     st.divider()
     
     with st.expander("ℹ️ Info & License"):
@@ -178,5 +176,6 @@ with tabs[3]:
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
+
 
 
