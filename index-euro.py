@@ -76,14 +76,7 @@ with st.sidebar:
     🐦 [Twitter / X](https://twitter.com/mardesz)
     """)
     
-    # Sekcja Wsparcie
-    st.subheader(L['support'])
-    st.markdown("""
-    <a href="https://www.buymeacoffee.com/marcindeszczka" target="_blank">
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
-        alt="Buy Me A Coffee" style="height: 40px !important;width: 145px !important;" >
-    </a>
-    """, unsafe_allow_html=True)
+    
 
     st.divider()
     
@@ -202,6 +195,7 @@ with tabs[3]:
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
+
 
 
 
