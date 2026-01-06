@@ -19,31 +19,40 @@ URL_ROLLCALLS = "https://github.com/HowTheyVote/data/releases/download/2026-01-0
 
 st.set_page_config(page_title="EuroMatrix 2026", layout="wide", page_icon="🇪🇺")
 
-# --- SŁOWNIK JĘZYKOWY ---
 LANGS = {
     'PL': {
         'tab_comp': "🤝 Porównywarka", 'tab_fra': "🧭 Frakcje", 'tab_ai': "🤖 Klastry AI", 'tab_top': "🔥 Tematy",
         'search': "🔍 Znajdź posła:", 'info_pca': "Mapa bliskości poglądów (PCA). Kropki blisko siebie głosują podobnie.",
         'friends': "Sojusznicy (zgodność):", 'enemies': "Oponenci (różnica):",
         'cl_summary': "Zestawienie składu klastrów (kogo AI połączyło ze sobą):",
-        'mep_belongs': "Wybrany poseł należy do:", 'no_mep': "Wybierz posła, aby go podświetlić.",
-        'topic_input': "Wpisz temat (np. Ukraina, Green Deal):", 'no_results': "Brak wyników dla tego tematu.",
-        'about_author': "O Autorze",
+        'num_clusters': "Liczba klastrów AI",
+        'about_author': "O Autorze", 'support': "Wsparcie projektu",
+        'how_it_works': "Jak to czytać?",
+        'method_desc': """
+            **O co tu chodzi?**
+            1. **Mapa (PCA):** Algorytm analizuje tysiące głosowań i układa posłów na płaszczyźnie. Im bliżej siebie są dwie kropki, tym częściej ci posłowie głosują tak samo.
+            2. **Klastry AI:** Sztuczna inteligencja ignoruje przynależność partyjną i dzieli posłów na grupy tylko na podstawie ich realnych decyzji. Pozwala to wykryć 'ciche koalicje' ponad podziałami.
+        """
     },
     'EN': {
         'tab_comp': "🤝 Comparator", 'tab_fra': "🧭 Groups", 'tab_ai': "🤖 AI Clusters", 'tab_top': "🔥 Topics",
         'search': "🔍 Find MEP:", 'info_pca': "Ideological proximity map (PCA). Dots close together vote similarly.",
         'friends': "Allies (agreement):", 'enemies': "Opponents (divergence):",
         'cl_summary': "Cluster composition overview (who was grouped together):",
-        'mep_belongs': "Selected MEP belongs to:", 'no_mep': "Select an MEP to highlight them.",
-        'topic_input': "Enter topic (e.g. Ukraine, Green Deal):", 'no_results': "No results for this topic.",
-        'about_author': "About Author", 
+        'num_clusters': "Number of AI Clusters",
+        'about_author': "About Author", 'support': "Support project",
+        'how_it_works': "How to read this?",
+        'method_desc': """
+            **How it works?**
+            1. **The Map (PCA):** The algorithm analyzes thousands of votes and places MEPs on a 2D plane. The closer two dots are, the more often those MEPs vote identically.
+            2. **AI Clusters:** The AI ignores party labels and groups MEPs based solely on their actual decisions. This reveals 'hidden coalitions' across official political groups.
+        """
     }
 }
 
 # --- PANEL BOCZNY (SIDEBAR) ---
 with st.sidebar:
-    st.title("EuroMatrix AI")
+    st.title("EuroMatrix")
     lang_code = st.radio("Language / Język", ["PL", "EN"], horizontal=True, key="lang_selector")
     L = LANGS[lang_code]
     
@@ -64,7 +73,7 @@ with st.sidebar:
     with st.expander("ℹ️ Info & License"):
         st.markdown(f"**Source:** [HowTheyVote.eu](https://howtheyvote.eu)\n**License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)")
             
-    st.caption("© 2026 EuroMatrix AI")
+    st.caption("© 2026 EuroMatrix")
 
 # --- ŁADOWANIE DANYCH ---
 @st.cache_data(show_spinner=False)
@@ -176,6 +185,7 @@ with tabs[3]:
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
+
 
 
 
