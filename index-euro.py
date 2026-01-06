@@ -19,6 +19,7 @@ URL_ROLLCALLS = "https://github.com/HowTheyVote/data/releases/download/2026-01-0
 
 st.set_page_config(page_title="EuroMatrix 2026", layout="wide", page_icon="🇪🇺")
 
+# --- SŁOWNIK JĘZYKOWY ---
 LANGS = {
     'PL': {
         'tab_comp': "🤝 Porównywarka", 'tab_fra': "🧭 Frakcje", 'tab_ai': "🤖 Klastry AI", 'tab_top': "🔥 Tematy",
@@ -28,10 +29,12 @@ LANGS = {
         'num_clusters': "Liczba klastrów AI",
         'about_author': "O Autorze", 'support': "Wsparcie projektu",
         'how_it_works': "Jak to czytać?",
+        'topic_input': "Wpisz temat (np. Ukraina, Green Deal):",
+        'no_results': "Brak wyników dla tego tematu.",
         'method_desc': """
             **O co tu chodzi?**
             1. **Mapa (PCA):** Algorytm analizuje tysiące głosowań i układa posłów na płaszczyźnie. Im bliżej siebie są dwie kropki, tym częściej ci posłowie głosują tak samo.
-            2. **Klastry AI:** Sztuczna inteligencja ignoruje przynależność partyjną i dzieli posłów na grupy tylko na podstawie ich realnych decyzji. Pozwala to wykryć 'ciche koalicje' ponad podziałami.
+            2. **Klastry AI:** Sztuczna inteligencja ignoruje partyjne etykiety i dzieli posłów na grupy tylko na podstawie ich realnych decyzji.
         """
     },
     'EN': {
@@ -42,10 +45,12 @@ LANGS = {
         'num_clusters': "Number of AI Clusters",
         'about_author': "About Author", 'support': "Support project",
         'how_it_works': "How to read this?",
+        'topic_input': "Enter topic (e.g. Ukraine, Green Deal):",
+        'no_results': "No results for this topic.",
         'method_desc': """
             **How it works?**
             1. **The Map (PCA):** The algorithm analyzes thousands of votes and places MEPs on a 2D plane. The closer two dots are, the more often those MEPs vote identically.
-            2. **AI Clusters:** The AI ignores party labels and groups MEPs based solely on their actual decisions. This reveals 'hidden coalitions' across official political groups.
+            2. **AI Clusters:** The AI ignores party labels and groups MEPs based solely on their actual decisions.
         """
     }
 }
@@ -58,15 +63,27 @@ with st.sidebar:
     
     st.divider()
     
+    # Wyjaśnienie AI dla laika
+    with st.expander(f"❓ {L['how_it_works']}"):
+        st.info(L['method_desc'])
+    
+    st.divider()
+
     # Sekcja Autorska
     st.subheader(L['about_author'])
-    st.markdown("""
-    **Marcin Deszczka** 📧 marcin.deszczka-at-gmail.com 
+    st.markdown(f"""
+    **Marcin Deszczka** 📧 `marcin.deszczka [at] gmail.com`  
     🐦 [Twitter / X](https://twitter.com/mardesz)
     """)
     
-    
-   
+    # Sekcja Wsparcie
+    st.subheader(L['support'])
+    st.markdown("""
+    <a href="https://www.buymeacoffee.com/marcindeszczka" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
+        alt="Buy Me A Coffee" style="height: 40px !important;width: 145px !important;" >
+    </a>
+    """, unsafe_allow_html=True)
 
     st.divider()
     
@@ -128,25 +145,23 @@ with tabs[0]:
         c2.subheader(L['enemies'])
         c2.dataframe(res.tail(10).sort_values('Zgodność'), use_container_width=True, hide_index=True)
 
-# TAB 2: Frakcje (Mapa ogólna z wyszukiwarką)
+# TAB 2: Frakcje
 with tabs[1]:
     st.info(L['info_pca'])
     sel_mep_fra = st.selectbox(L['search'], [""] + sorted(list(names_dict.values())), key="f1")
-    
     fig_fra = px.scatter(df_base, x='X', y='Y', color='group', hover_name='name', height=650, 
                          color_discrete_map={'EPP': '#0055aa', 'S&D': '#f0001c', 'Renew': '#ffcc00', 'Greens/EFA': '#44aa00', 'ECR': '#000080', 'PfE': '#202040', 'The Left': '#800000', 'NI': '#999999'},
                          template="plotly_white")
-    
     if sel_mep_fra:
         mid_f = {v: k for k, v in names_dict.items()}.get(sel_mep_fra)
         fig_fra.add_trace(go.Scatter(x=[df_base.loc[mid_f, 'X']], y=[df_base.loc[mid_f, 'Y']], 
                                      mode='markers+text', marker=dict(color='black', size=15, symbol='star'), 
-                                     text=[f"★ {sel_mep_fra}"], textposition="top center", name="Cel"))
+                                     text=[f"★ {sel_mep_fra}"], textposition="top center", name="Target"))
     st.plotly_chart(fig_fra, use_container_width=True)
 
 # TAB 3: Klastry AI
 with tabs[2]:
-    nk = st.slider("Liczba klastrów AI", 2, 20, 8)
+    nk = st.slider(L['num_clusters'], 2, 20, 8)
     df_base['cluster'] = [f"Grupa {c+1}" for c in KMeans(n_clusters=nk, random_state=42, n_init=10).fit_predict(pivot_all.T)]
     sel_mep_ai = st.selectbox(L['search'], [""] + sorted(list(names_dict.values())), key="a1")
     
@@ -170,7 +185,7 @@ with tabs[2]:
             c2.write("**Przykładowi posłowie:**")
             c2.caption(", ".join(members_in_cl['name'].head(15).tolist()) + "...")
 
-# TAB 4: Tematy
+# TAB 4: Tematy (Naprawione)
 with tabs[3]:
     query = st.text_input(L['topic_input'], "Ukraine")
     if query:
@@ -181,7 +196,9 @@ with tabs[3]:
             pca_t = PCA(n_components=2).fit_transform(p_t.T)
             df_t = pd.DataFrame(pca_t, columns=['X', 'Y'], index=p_t.columns)
             df_t['name'], df_t['group'] = df_t.index.map(names_dict), df_t.index.map(groups_dict)
-            fig_t = px.scatter(df_t, x='X', y='Y', color='group', hover_name='name', title=f"Analiza tematu: {query}", height=600, template="plotly_white")
+            fig_t = px.scatter(df_t, x='X', y='Y', color='group', hover_name='name', 
+                               title=f"{query}", height=600, template="plotly_white",
+                               color_discrete_map={'EPP': '#0055aa', 'S&D': '#f0001c', 'Renew': '#ffcc00', 'Greens/EFA': '#44aa00', 'ECR': '#000080', 'PfE': '#202040', 'The Left': '#800000', 'NI': '#999999'})
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
