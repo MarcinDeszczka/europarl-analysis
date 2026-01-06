@@ -22,8 +22,8 @@ st.set_page_config(page_title="EuroMatrix 2026", layout="wide", page_icon="🇪�
 # --- SŁOWNIK JĘZYKOWY ---
 LANGS = {
     'PL': {
-        'tab_comp': "🤝 Porównywarka", 'tab_fra': "🧭 Frakcje", 'tab_ai': "🤖 Klastry AI", 'tab_top': "🔥 Tematy",
-        'search': "🔍 Znajdź posła:", 'info_pca': "Mapa bliskości poglądów (PCA). Kropki blisko siebie głosują podobnie.",
+        'tab_comp': "🤝 Porównywarka", 'tab_fra': "🧭 Mapa poglądów", 'tab_ai': "🤖 Klastry AI", 'tab_top': "🔥 Tematy",
+        'search': "🔍 Znajdź posła:", 'info_pca': "Mapa bliskości poglądów. Kropki blisko siebie głosują podobnie.",
         'friends': "Sojusznicy (zgodność):", 'enemies': "Oponenci (różnica):",
         'cl_summary': "Zestawienie składu klastrów (kogo AI połączyło ze sobą):",
         'num_clusters': "Liczba klastrów AI",
@@ -38,8 +38,8 @@ LANGS = {
         """
     },
     'EN': {
-        'tab_comp': "🤝 Comparator", 'tab_fra': "🧭 Groups", 'tab_ai': "🤖 AI Clusters", 'tab_top': "🔥 Topics",
-        'search': "🔍 Find MEP:", 'info_pca': "Ideological proximity map (PCA). Dots close together vote similarly.",
+        'tab_comp': "🤝 Comparator", 'tab_fra': "🧭 Map of political ideas", 'tab_ai': "🤖 AI Clusters", 'tab_top': "🔥 Topics",
+        'search': "🔍 Find MEP:", 'info_pca': "Ideological proximity map. Dots close together vote similarly.",
         'friends': "Allies (agreement):", 'enemies': "Opponents (divergence):",
         'cl_summary': "Cluster composition overview (who was grouped together):",
         'num_clusters': "Number of AI Clusters",
@@ -195,6 +195,7 @@ with tabs[3]:
             st.plotly_chart(fig_t, use_container_width=True)
         else:
             st.warning(L['no_results'])
+
 
 
 
